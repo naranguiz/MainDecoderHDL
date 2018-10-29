@@ -1,0 +1,90 @@
+-- Company: University of Bio Bio
+-- Engineer: Alonso Saez A
+-- Create Date:    18:17:01 10/28/2018 
+-- Project Name: Main Decoder
+-- Module Name:   /home/ise/Proyectos Arqui/Decodificador/tb_maindecoder.vhd
+--------------------------------------------------------------------------------
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+ 
+ENTITY tb_maindecoder IS
+END tb_maindecoder;
+ 
+ARCHITECTURE behavior OF tb_maindecoder IS 
+ 
+    -- Component Declaration for the Unit Under Test (UUT)
+ 
+    COMPONENT maindecoder
+    PORT(
+         op : IN  std_logic_vector(5 downto 0);
+         memtoreg : OUT  std_logic;
+         memwrite : OUT  std_logic;
+         branch : OUT  std_logic;
+         alusrc : OUT  std_logic;
+         regdst : OUT  std_logic;
+         regwrite : OUT  std_logic;
+         jump : OUT  std_logic;
+         aluop : OUT  std_logic_vector(1 downto 0)
+        );
+    END COMPONENT;
+    
+
+   --Inputs
+   signal op : std_logic_vector(5 downto 0) := (others => '0');
+
+ 	--Outputs
+   signal memtoreg : std_logic;
+   signal memwrite : std_logic;
+   signal branch : std_logic;
+   signal alusrc : std_logic;
+   signal regdst : std_logic;
+   signal regwrite : std_logic;
+   signal jump : std_logic;
+   signal aluop : std_logic_vector(1 downto 0);
+   -- No clocks detected in port list. Replace <clock> below with 
+   -- appropriate port name 
+ 
+BEGIN
+ 
+	-- Instantiate the Unit Under Test (UUT)
+   uut: maindecoder PORT MAP (
+          op => op,
+          memtoreg => memtoreg,
+          memwrite => memwrite,
+          branch => branch,
+          alusrc => alusrc,
+          regdst => regdst,
+          regwrite => regwrite,
+          jump => jump,
+          aluop => aluop
+        );
+ 
+   -- Stimulus process
+   stim_proc: process
+   begin		
+      -- hold reset state for 100 ns.
+      wait for 100 ns;	
+		op <= "000000";  -- R type
+		
+		wait for 100 ns;
+		op <= "100011";  -- LW
+		
+		wait for 100 ns; 
+		op <= "101011";  -- SW
+		
+		wait for 100 ns;  
+		op <= "000100";  -- BEQ
+		
+		wait for 100 ns;
+		op <= "001000";  -- ADDI
+		
+		wait for 100 ns;
+      op <= "000010";  -- J Type
+		
+		wait for 100 ns;  
+		op <= "110011";  -- Ilegal Operation
+		
+	wait;	
+   end process;
+
+end;
